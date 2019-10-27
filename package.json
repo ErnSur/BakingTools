@@ -1,0 +1,9 @@
+{
+  "name": "com.quickeye.bakingtools",
+  "displayName": "Baking Tools",
+  "version": "1.0.0",
+  "unity": "2019.1",
+  "author": "Ernest Sury\u015b",
+  "description": "Set of tools that streamline scene data baking",
+  "type": "tool"
+}
