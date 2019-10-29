@@ -14,14 +14,23 @@ namespace QuickEye.BakingTools
 
         //DisplaySelected objects as baking properties list
         //include list of materials
+        [MenuItem ("CONTEXT/MeshRenderer/ChefTools")]
+        public static void OpenWindow()
+        {
+            GetWindow<ChefTools>();
+        }
         private void OnGUI()
         {
             using (new EditorGUI.DisabledScope(Selection.gameObjects.Length == 0))
             {
                 foreach (var mold in library.molds)
                 {
-                    if (GUILayout.Button(mold.name))
+                    //Maybe use somenthing like Selectable Button Controll
+                    //First Click Would Select Mold and show its stats
+                    //Click on Selected Button Would Make it apply Mold
+                    if (GUILayout.Button(mold.name)) // Add Shortcut possibility to each mold
                     {
+                        ShowNotification(new GUIContent($"{mold.name} Applied"));
                         var includeChildren = GetShouldIncludeChildren(Selection.gameObjects);
 
                         foreach (var go in Selection.gameObjects)
@@ -51,13 +60,13 @@ namespace QuickEye.BakingTools
         {
             Undo.RecordObject(go, "Apply baking mold");
 
-            SetStaticFlags(go, mold.staticFlags);
-
+            mold.staticFlags.TryApply(go);
             if(go.TryGetComponent<MeshRenderer>(out var renderer))
             {
-                renderer.shadowCastingMode = mold.castShadows;
-                SetLightmapScale(renderer, mold.lightmapScale);
-                SetStitchSeams(renderer, mold.stitchSeams);
+                mold.castShadows.TryApply(renderer);
+                mold.lightmapScale.TryApply(renderer);
+                mold.stitchSeams.TryApply(renderer);
+                mold.navMeshArea.TryApply(renderer);
             }
 
             if (includeChildren)
@@ -68,26 +77,6 @@ namespace QuickEye.BakingTools
                     ApplyMold(child, mold,true);
                 }
             }
-        }
-
-        private void SetLightmapScale(MeshRenderer renderer, float scale)
-        {
-            var so = new SerializedObject(renderer);
-            so.FindProperty("m_ScaleInLightmap").floatValue = scale;
-            so.ApplyModifiedProperties();
-        }
-
-        private void SetStitchSeams(MeshRenderer renderer, bool stitchSeams)
-        {
-            var so = new SerializedObject(renderer);
-            so.FindProperty("m_StitchLightmapSeams").boolValue = stitchSeams;
-            so.ApplyModifiedProperties();
-        }
-
-        private static void SetStaticFlags(GameObject obj, StaticEditorFlags flags)
-        {
-            Undo.RecordObject(obj, "Set Interior Static");
-            GameObjectUtility.SetStaticEditorFlags(obj, flags);
         }
 
         private ShouldIncludeChildren GetShouldIncludeChildren(IEnumerable<GameObject> gameObjects)
@@ -122,8 +111,6 @@ namespace QuickEye.BakingTools
     [CustomEditor(typeof(BakingMoldsLibrary))]
     public class BakingMoldsLibraryEditor : Editor
     {
-       
-
         public override VisualElement CreateInspectorGUI()
         {
             var root = new VisualElement();

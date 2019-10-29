@@ -5,11 +5,21 @@ using UnityEngine.UIElements;
 
 namespace QuickEye.BakingTools
 {
-    [CustomPropertyDrawer(typeof(ToglabbleParameter<>),true)]
+    [CustomPropertyDrawer(typeof(ToglabbleParameter<>), true)]
     public class ToglableParameterDrawer : PropertyDrawer
     {
-        private Toggle _isOnField;
-        private VisualElement _valueField;
+        #region TemporaryBugWorkaround
+        //Unity seems to reuse PropertyDrawers when drawing ones in a list
+        //due to this everything needs to be inside the scope of CreatePropertyGUI function
+        //if this is a bug and will be fixed we can move it outside this scope
+        //private Toggle _isOnField;
+        //private VisualElement _valueField;
+        #endregion
+
+        public ToglableParameterDrawer()
+        {
+            //Debug.Log("New Property Drawer");
+        }
 
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {
@@ -17,70 +27,78 @@ namespace QuickEye.BakingTools
             root.style.flexDirection = FlexDirection.Row;
             root.style.flexGrow = 1;
 
-            _isOnField = new Toggle();
-            _isOnField.name =
-            _isOnField.bindingPath = "isOn";
-            _isOnField.RegisterValueChangedCallback(OnIsOnValueChange);
-            root.Add(_isOnField);
+            var isOnField = new Toggle();
+            isOnField.name =
+            isOnField.bindingPath = "isOn";
+            root.Add(isOnField);
+
+            VisualElement valueField;
 
             var valueProp = property.FindPropertyRelative("value");
-
-            if(IsPropertyTypeFlag(valueProp, out var defaultValue))
+            if (IsPropertyTypeFlag(valueProp, out var defaultValue))
             {
-                _valueField = new EnumFlagsField(defaultValue, false)
+                valueField = new EnumFlagsField(defaultValue, false)
                 {
                     label = property.displayName
                 };
             }
             else
             {
-                _valueField = new PropertyField
+                valueField = new PropertyField
                 {
                     label = property.displayName
                 };
             }
 
-            _valueField.name =
-            (_valueField as IBindable).bindingPath = "value";
-            _valueField.style.flexGrow = 1;
+            isOnField.RegisterValueChangedCallback(OnIsOnValueChange);
 
-            root.Add(_valueField);
+            valueField.name =
+            (valueField as IBindable).bindingPath = "value";
+            valueField.style.flexGrow = 1;
+
+            root.Add(valueField);
 
             root.RegisterCallback<AttachToPanelEvent>(InitFields);
 
+           // Debug.Log($"Created new PropertyDrawer");
             return root;
-        }
 
-        private void InitFields(AttachToPanelEvent evt)
-        {
-            _valueField.SetEnabled(_isOnField.value);
-        }
-
-        private void OnIsOnValueChange(ChangeEvent<bool> evt)
-        {
-            if(evt.target == _isOnField)
+            #region TemporaryBugWorkaround
+            //Unity seems to reuse PropertyDrawers when drawing ones in a list
+            //due to this everything needs to be inside the scope of this function
+            //if this is a bug and will be fixed we can move it outside this scope
+            void InitFields(AttachToPanelEvent evt)
             {
-                _valueField.SetEnabled(evt.newValue);
+                valueField.SetEnabled(isOnField.value);
             }
-        }
 
-        private bool IsPropertyTypeFlag(SerializedProperty prop, out Enum value)
-        {
-            if (prop.propertyType == SerializedPropertyType.Enum)
+            void OnIsOnValueChange(ChangeEvent<bool> evt)
             {
-                var baseType = fieldInfo.FieldType.BaseType;
-                if (baseType.IsGenericType)
+                if (evt.target == isOnField)
                 {
-                    var genericArgument = baseType.GetGenericArguments()[0];
-                    
-                    value = Enum.ToObject(genericArgument, prop.enumValueIndex) as Enum;
-
-                    return genericArgument.IsDefined(typeof(FlagsAttribute), true);
+                    valueField.SetEnabled(evt.newValue);
                 }
             }
-            value = null;
 
-            return false;
+            bool IsPropertyTypeFlag(SerializedProperty prop, out Enum value)
+            {
+                if (prop.propertyType == SerializedPropertyType.Enum)
+                {
+                    var baseType = fieldInfo.FieldType.BaseType;
+                    if (baseType.IsGenericType)
+                    {
+                        var genericArgument = baseType.GetGenericArguments()[0];
+
+                        value = Enum.ToObject(genericArgument, prop.enumValueIndex) as Enum;
+
+                        return genericArgument.IsDefined(typeof(FlagsAttribute), true);
+                    }
+                }
+                value = null;
+
+                return false;
+            }
+            #endregion
         }
     }
 }
