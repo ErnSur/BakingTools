@@ -9,24 +9,31 @@ using UnityEngine.UIElements;
 
 namespace QuickEye.BakingTools
 {
-    public class ChefTools : EditorWindow
+    public class ChefTools : EditorWindow, ISerializationCallbackReceiver
     {
-        public BakingMoldsLibrary library;
+        [SerializeField]
+        private BakingMold[] molds;
+
+        static ChefTools()
+        {
+
+        }
+
+        //public BakingMoldsLibrary library;
 
         //DisplaySelected objects as baking properties list
         //include list of materials
         [MenuItem("CONTEXT/MeshRenderer/ChefTools")]
-        public static void OpenWindow(BakingMoldsLibrary lib)
+        public static void OpenWindow()
         {
             var wnd = GetWindow<ChefTools>();
-            wnd.library = lib;
+            //wnd.library = lib;
             wnd.titleContent = new GUIContent("Chef Tools");
-            wnd.Init();
         }
 
         private void OnEnable()
         {
-            if (library != null)
+            //if (library != null)
             {
                 Init();
             }
@@ -34,13 +41,57 @@ namespace QuickEye.BakingTools
 
         private void Init()
         {
-            var so = new SerializedObject(library);
-            //var molds = new PropertyField(so.FindProperty("molds"));
-            //rootVisualElement.Add(molds);
+            var so = new SerializedObject(this);
+            var moldsProp = new PropertyField(so.FindProperty("molds"));
 
+            ListView listView = CreateMoldListView();
+            VisualElement addRemoveButtons = CreateListAddRemoveButtons();
+
+            VisualElement moldInspector = CreateMoldInspector(so, listView);
+
+            var refresh = new Button(() => { molds = ChefToolsSettings.settings.Get<BakingMold[]>("molds", SettingsScope.User); listView.Refresh(); })
+            { text = "Refresh"};
+            rootVisualElement.Add(refresh);
+
+
+            rootVisualElement.Add(listView);
+            rootVisualElement.Add(addRemoveButtons);
+            rootVisualElement.Add(moldInspector);
+            rootVisualElement.Bind(so);
+        }
+
+        private static VisualElement CreateMoldInspector(SerializedObject so, ListView listView)
+        {
+            var moldInspector = new VisualElement();
+            var moldProp = new PropertyField();
+            listView.onSelectionChanged += UpdateMoldInspecotr;
+
+            void UpdateMoldInspecotr(List<object> obj)
+            {
+                moldProp.bindingPath = $"molds.Array.data[{listView.selectedIndex}]";
+                moldProp.Bind(so);
+                moldProp.Q<Foldout>().value = true;
+            }
+            moldInspector.Add(moldProp);
+            return moldInspector;
+        }
+
+        private static VisualElement CreateListAddRemoveButtons()
+        {
+            var addRemoveButtons = new VisualElement();
+            addRemoveButtons.style.flexDirection = FlexDirection.Row;
+            var add = new Button() { text = "Add" };
+            var remove = new Button() { text = "Remove" };
+            addRemoveButtons.Add(add);
+            addRemoveButtons.Add(remove);
+            return addRemoveButtons;
+        }
+
+        private ListView CreateMoldListView()
+        {
             //using (new EditorGUI.DisabledScope(Selection.gameObjects.Length == 0))
             var listView = new ListView();
-            listView.itemsSource = library.molds;
+            listView.itemsSource = molds;
             listView.itemHeight = 23;
             listView.style.minHeight = 200;
             listView.style.flexGrow = 1;
@@ -63,33 +114,12 @@ namespace QuickEye.BakingTools
             };
             listView.bindItem = (e, index) =>
             {
-                Debug.Log(index);
-                e.Q<Label>().text = library.molds[index].name;
-                e.Q<Button>().clickable = new Clickable(() => OnApplyButtonClicked(library.molds[index]));
+                e.Q<Label>().text = molds[index].name;
+                e.Q<Button>().clickable = new Clickable(() => OnApplyButtonClicked(molds[index]));
             };
-            //listView.bindingPath = "molds";
             listView.selectionType = SelectionType.Single;
-
-
-
-            var moldInspector = new VisualElement();
-            var moldProp = new PropertyField();
-            listView.onSelectionChanged += UpdateMoldInspecotr;
-
-            void UpdateMoldInspecotr(List<object> obj)
-            {
-                moldProp.bindingPath = $"molds.Array.data[{listView.selectedIndex}]";
-                moldProp.Bind(so);
-            }
-            moldInspector.Add(moldProp);
-
-
-            rootVisualElement.Add(listView);
-            rootVisualElement.Add(moldInspector);
-            rootVisualElement.Bind(so);
+            return listView;
         }
-
-        
 
         // Add Shortcut possibility to each mold
         private void OnApplyButtonClicked(BakingMold mold)
@@ -158,6 +188,16 @@ namespace QuickEye.BakingTools
             {
                 return gameObjects.Any(go => go.transform.childCount > 0);
             }
+        }
+
+        public void OnBeforeSerialize()
+        {
+            //ChefToolsSettings.settings.Set("molds", molds, SettingsScope.User);
+        }
+
+        public void OnAfterDeserialize()
+        {
+           // molds = ChefToolsSettings.settings.Get<BakingMold[]>("molds",SettingsScope.User);
         }
 
         public enum ShouldIncludeChildren
