@@ -38,7 +38,7 @@ namespace QuickEye.BakingTools
 
         private void Print()
         {
-            var molds = ChefToolsSettings.settings.Get<BakingMold[]>("molds", SettingsScope.User);
+            var molds = ChefToolsSettings.settings.Get<BakingMold[]>("molds", SettingsScope.Project);
             Debug.Log(molds.Length);
         }
     }

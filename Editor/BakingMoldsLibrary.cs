@@ -12,7 +12,7 @@ namespace QuickEye.BakingTools
 
         public void SaveToSettings()
         {
-            ChefToolsSettings.settings.Set("molds", molds, SettingsScope.User);
+            ChefToolsSettings.settings.Set("molds", molds, SettingsScope.Project);
             
             ChefToolsSettings.settings.Save();
         }

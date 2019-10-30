@@ -33,29 +33,29 @@ namespace QuickEye.BakingTools
 
         private void OnEnable()
         {
-            //if (library != null)
-            {
-                Init();
-            }
+            Debug.Log("Enable");
+
+            molds = ChefToolsSettings.settings.Get<BakingMold[]>("molds", SettingsScope.Project);
+
+            Init();
         }
 
         private void Init()
         {
             var so = new SerializedObject(this);
-            var moldsProp = new PropertyField(so.FindProperty("molds"));
+            var moldsProperty = so.FindProperty("molds");
+            var moldsPropertyField = new PropertyField(moldsProperty);
 
-            ListView listView = CreateMoldListView();
-            VisualElement addRemoveButtons = CreateListAddRemoveButtons();
+            var listView = CreateMoldListView();
+            var addButton = CreateListAddButton(moldsProperty,listView);
+            var moldInspector = CreateMoldInspector(so, listView);
 
-            VisualElement moldInspector = CreateMoldInspector(so, listView);
-
-            var refresh = new Button(() => { molds = ChefToolsSettings.settings.Get<BakingMold[]>("molds", SettingsScope.User); listView.Refresh(); })
+            var refresh = new Button(() => { listView.Refresh(); })
             { text = "Refresh"};
             rootVisualElement.Add(refresh);
 
-
             rootVisualElement.Add(listView);
-            rootVisualElement.Add(addRemoveButtons);
+            rootVisualElement.Add(addButton);
             rootVisualElement.Add(moldInspector);
             rootVisualElement.Bind(so);
         }
@@ -76,15 +76,18 @@ namespace QuickEye.BakingTools
             return moldInspector;
         }
 
-        private static VisualElement CreateListAddRemoveButtons()
+        private VisualElement CreateListAddButton(SerializedProperty moldsProperty,ListView listView)
         {
-            var addRemoveButtons = new VisualElement();
-            addRemoveButtons.style.flexDirection = FlexDirection.Row;
-            var add = new Button() { text = "Add" };
-            var remove = new Button() { text = "Remove" };
-            addRemoveButtons.Add(add);
-            addRemoveButtons.Add(remove);
-            return addRemoveButtons;
+            var add = new Button(AddMold) { text = "Add" };
+            void AddMold()
+            {
+                Debug.Log(moldsProperty.arraySize);
+                var l = molds.ToList();
+                l.Add(null);
+                molds = l.ToArray();
+                listView.Refresh();
+            }
+            return add;
         }
 
         private ListView CreateMoldListView()
@@ -192,12 +195,13 @@ namespace QuickEye.BakingTools
 
         public void OnBeforeSerialize()
         {
-            //ChefToolsSettings.settings.Set("molds", molds, SettingsScope.User);
+            Debug.Log("Serialize");
+            ChefToolsSettings.settings.Set("molds", molds, SettingsScope.Project);
+            ChefToolsSettings.settings.Save();
         }
 
         public void OnAfterDeserialize()
         {
-           // molds = ChefToolsSettings.settings.Get<BakingMold[]>("molds",SettingsScope.User);
         }
 
         public enum ShouldIncludeChildren
