@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.UIElements;
+using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -34,62 +33,29 @@ namespace QuickEye.BakingTools
 
         private void Init()
         {
+            var scrollView = new ScrollView(ScrollViewMode.Vertical);
+            rootVisualElement.Add(scrollView);
+
             var so = new SerializedObject(library);
-            //var molds = new PropertyField(so.FindProperty("molds"));
-            //rootVisualElement.Add(molds);
-
-            //using (new EditorGUI.DisabledScope(Selection.gameObjects.Length == 0))
-            var listView = new ListView();
-            listView.itemsSource = library.molds;
-            listView.itemHeight = 23;
-            listView.style.minHeight = 200;
-            listView.style.flexGrow = 1;
-            listView.makeItem = () =>
-            {
-                var container = new VisualElement();
-                container.style.flexDirection = FlexDirection.Row;
-                container.style.alignItems = Align.Center;
-                container.style.justifyContent = Justify.SpaceBetween;
-
-                var label = new Label();
-                container.Add(label);
-
-                var b = new Button();
-                b.style.height = 16;
-                b.style.width = 100;
-                b.text = "Apply";
-                container.Add(b);
-                return container;
-            };
-            listView.bindItem = (e, index) =>
-            {
-                Debug.Log(index);
-                e.Q<Label>().text = library.molds[index].name;
-                e.Q<Button>().clickable = new Clickable(() => OnApplyButtonClicked(library.molds[index]));
-            };
-            //listView.bindingPath = "molds";
-            listView.selectionType = SelectionType.Single;
-
-
+            var list = new MoldsReorderableList(so, so.FindProperty("molds"));
+            list.applyButtonClickedEvent += i =>  OnApplyButtonClicked(library.molds[i]);
+            scrollView.Add(list);
 
             var moldInspector = new VisualElement();
             var moldProp = new PropertyField();
-            listView.onSelectionChanged += UpdateMoldInspecotr;
+            moldProp.Bind(so);
+            list.OnSelectCallback += UpdateMoldInspector;
 
-            void UpdateMoldInspecotr(List<object> obj)
+            void UpdateMoldInspector(ReorderableList l)
             {
-                moldProp.bindingPath = $"molds.Array.data[{listView.selectedIndex}]";
+                moldProp.bindingPath = $"molds.Array.data[{l.index}]";
                 moldProp.Bind(so);
+                moldProp.Q<Foldout>().value = true;
             }
             moldInspector.Add(moldProp);
 
-
-            rootVisualElement.Add(listView);
-            rootVisualElement.Add(moldInspector);
-            rootVisualElement.Bind(so);
+            scrollView.Add(moldInspector);
         }
-
-        
 
         // Add Shortcut possibility to each mold
         private void OnApplyButtonClicked(BakingMold mold)
