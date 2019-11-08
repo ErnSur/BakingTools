@@ -8,24 +8,28 @@ using UnityEngine.UIElements;
 
 namespace QuickEye.BakingTools
 {
-    public class ChefTools : EditorWindow
+    public class ChefTools : EditorWindow, IHasCustomMenu
     {
-        public BakingMoldsLibrary library;
+        private const string _navMeshSettingsMenuPath = "Window/AI/Navigation";
+        private const string _lightingSettingsMenuPath = "Window/Rendering/Lighting Settings";
+        private const string _occlusionCullingSettingsMenuPath = "Window/Rendering/Occlusion Culling";
+
+        [SerializeField]
+        private BakingMoldsLibrary _library;
 
         //DisplaySelected objects as baking properties list
         //include list of materials
-        [MenuItem("CONTEXT/MeshRenderer/ChefTools")]
         public static void OpenWindow(BakingMoldsLibrary lib)
         {
             var wnd = GetWindow<ChefTools>();
-            wnd.library = lib;
+            wnd._library = lib;
             wnd.titleContent = new GUIContent("Chef Tools");
             wnd.Init();
         }
 
         private void OnEnable()
         {
-            if (library != null)
+            if (_library != null)
             {
                 Init();
             }
@@ -36,9 +40,9 @@ namespace QuickEye.BakingTools
             var scrollView = new ScrollView(ScrollViewMode.Vertical);
             rootVisualElement.Add(scrollView);
 
-            var so = new SerializedObject(library);
+            var so = new SerializedObject(_library);
             var list = new MoldsReorderableList(so, so.FindProperty("molds"));
-            list.applyButtonClickedEvent += i =>  OnApplyButtonClicked(library.molds[i]);
+            list.applyButtonClickedEvent += i =>  OnApplyButtonClicked(_library.molds[i]);
             scrollView.Add(list);
 
             var moldInspector = new VisualElement();
@@ -123,6 +127,25 @@ namespace QuickEye.BakingTools
             bool HasChildren()
             {
                 return gameObjects.Any(go => go.transform.childCount > 0);
+            }
+        }
+
+        public void AddItemsToMenu(GenericMenu menu)
+        {
+            menu.AddItem(new GUIContent("Lighting Settings"), false, OpenLightingSettings);
+            menu.AddItem(new GUIContent("Occlusion Settings"), false, OpenOcclusionSettings);
+            menu.AddItem(new GUIContent("Navigation Settings"), false, OpenNavigationSettings);
+            void OpenNavigationSettings()
+            {
+                EditorApplication.ExecuteMenuItem(_navMeshSettingsMenuPath);
+            }
+            void OpenLightingSettings()
+            {
+                EditorApplication.ExecuteMenuItem(_lightingSettingsMenuPath);
+            }
+            void OpenOcclusionSettings()
+            {
+                EditorApplication.ExecuteMenuItem(_occlusionCullingSettingsMenuPath);
             }
         }
 
