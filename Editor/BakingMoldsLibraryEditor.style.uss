@@ -1,0 +1,48 @@
+#molds-list-view {
+    max-height: 271;
+    min-width: 200;
+}
+
+.unity-list-view__reorderable-item__container {
+    justify-content: center;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.mold-list__item {
+    flex-direction: row;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.mold-list__item > Label {
+    font-size: 15px;
+    flex-grow: 1;
+    -unity-text-align: middle-left;
+}
+
+.mold-list__item > ToolbarButton {
+    display: none;
+    -unity-text-align: middle-center;
+}
+
+.unity-collection-view__item--selected .mold-list__item > ToolbarButton {
+    display: flex;
+}
+
+.transition-container.details-active {
+    left: -100%;
+    transition-property: left;
+    transition-duration: 0.2s;
+}
+
+.anim-test {
+    background-color: rgb(192, 88, 20);
+}
+
+.transition-container {
+    left: 0;
+}

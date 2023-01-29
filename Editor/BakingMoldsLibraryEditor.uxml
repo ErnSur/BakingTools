@@ -1,0 +1,12 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" gen-cs-file="8808b031bb8f61a4b88fbc2794df9558" editor-extension-mode="True">
+    <ui:Template name="MoldListItem" src="project://database/Assets/MoldListItem.uxml?fileID=9197481963319205126&amp;guid=5bb53ab78e8e0074a8edfa3af11e8d3e&amp;type=3#MoldListItem" />
+    <Style src="project://database/Packages/com.quickeye.bakingtools/Editor/BakingMoldsLibraryEditor.style.uss?fileID=7433441132597879392&amp;guid=bf9a0c53ec591024e96aa1795e87c023&amp;type=3#BakingMoldsLibraryEditor.style" />
+    <uie:Toolbar style="transition-property: left; transition-duration: 1s;">
+        <uie:ToolbarBreadcrumbs name="breadcrumbs" />
+    </uie:Toolbar>
+    <ui:VisualElement name="transition-container" class="transition-container" style="background-color: rgba(0, 0, 0, 0); flex-direction: row; width: 200%; transition-property: left; transition-duration: 0.2s;">
+        <ui:ListView focusable="true" name="molds-list-view" fixed-item-height="25" reorder-mode="Animated" show-add-remove-footer="true" show-bound-collection-size="false" style="flex-grow: 1; width: 50%;" />
+        <ui:VisualElement name="mold-details" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); width: 50%;" />
+    </ui:VisualElement>
+    <ui:Instance template="MoldListItem" name="MoldListItem" />
+</ui:UXML>

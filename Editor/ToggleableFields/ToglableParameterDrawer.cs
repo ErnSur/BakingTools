@@ -15,11 +15,7 @@ namespace QuickEye.BakingTools
         //private Toggle _isOnField;
         //private VisualElement _valueField;
         #endregion
-
-        public ToglableParameterDrawer()
-        {
-            //Debug.Log("New Property Drawer");
-        }
+        
 
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {
@@ -60,7 +56,6 @@ namespace QuickEye.BakingTools
 
             root.RegisterCallback<AttachToPanelEvent>(InitFields);
 
-           // Debug.Log($"Created new PropertyDrawer");
             return root;
 
             #region TemporaryBugWorkaround
