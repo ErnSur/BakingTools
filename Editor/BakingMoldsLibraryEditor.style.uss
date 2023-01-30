@@ -11,11 +11,6 @@
 
 .mold-list__item {
     flex-direction: row;
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
 }
 
 .mold-list__item > Label {
@@ -45,4 +40,18 @@
 
 .transition-container {
     left: 0;
+}
+
+#arrow-button {
+    background-image: var(--unity-icons-arrow_right);
+    -unity-background-scale-mode: scale-to-fit;
+    width: 20px;
+}
+
+#arrow-button:hover {
+    background-color: var(--unity-colors-toolbar_button-background-hover);
+}
+
+#arrow-button:active {
+    background-color: red;
 }

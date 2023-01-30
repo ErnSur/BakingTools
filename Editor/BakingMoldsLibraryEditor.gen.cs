@@ -14,7 +14,7 @@ namespace QuickEye.BakingTools
         private VisualElement _transitionContainer;
         private ListView _moldsListView;
         private VisualElement _moldDetails;
-        private TemplateContainer _moldListItem;
+        private VisualElement _arrowButton;
     
         protected void AssignQueryResults(VisualElement root)
         {
@@ -22,7 +22,7 @@ namespace QuickEye.BakingTools
             _transitionContainer = root.Q<VisualElement>("transition-container");
             _moldsListView = root.Q<ListView>("molds-list-view");
             _moldDetails = root.Q<VisualElement>("mold-details");
-            _moldListItem = root.Q<TemplateContainer>("MoldListItem");
+            _arrowButton = root.Q<VisualElement>("arrow-button");
         }
     }
 }

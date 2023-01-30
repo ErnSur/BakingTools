@@ -39,12 +39,31 @@ namespace QuickEye.BakingTools
             AssignQueryResults(root);
             SetupBreadcrumbs();
             SetupListView();
+            root.Add(new Button(() =>
+            {
+                var prop = new PropertyField(_moldListProperty);
+                root.Add(prop);
+                prop.Bind(serializedObject);
+                
+            }){text = "hejo" });
             return root;
+        }
+
+        void SetupDetailsView()
+        {
+            _moldDetails.Clear();
+            var propertyField = new PropertyField(SelectedProperty);
+            propertyField.Bind(serializedObject);
+            _moldDetails.Add(propertyField);
         }
 
         void SetupBreadcrumbs()
         {
-            _breadcrumbs.PushItem("Molds",()=>{_transitionContainer.RemoveFromClassList("details-active");});
+            _breadcrumbs.PushItem("Molds", () =>
+            {
+                _transitionContainer.RemoveFromClassList("details-active");
+                _breadcrumbs.PopItem();
+            });
         }
 
         void SetupListView()
@@ -57,8 +76,6 @@ namespace QuickEye.BakingTools
             });
             _moldsListView.itemsChosen += items =>
             {
-                _breadcrumbs.PushItem("Details",()=>{_transitionContainer.AddToClassList("details-active");});
-
                 var sceneView = SceneView.lastActiveSceneView;
                 if (sceneView != null)
                     sceneView.ShowNotification(new GUIContent($"Apply {SelectedProperty.displayName}"));
@@ -81,8 +98,15 @@ namespace QuickEye.BakingTools
             label.bindingPath = nameof(BakingMold.name);
             root.Add(label);
 
-            var button = new ToolbarButton();
-            button.text = "Apply";
+            var button = new VisualElement();
+            button.RegisterCallback<ClickEvent>(e =>
+            {
+                var elementName = SelectedProperty.displayName;
+                _breadcrumbs.PushItem(elementName);
+                SetupDetailsView();
+                _transitionContainer.AddToClassList("details-active");
+            });
+            button.name = "arrow-button";
             root.Add(button);
 
             return root;
@@ -143,5 +167,6 @@ namespace QuickEye.BakingTools
                 position.y += position.height + EditorGUIUtility.standardVerticalSpacing;
             }
         }
+        
     }
 }
