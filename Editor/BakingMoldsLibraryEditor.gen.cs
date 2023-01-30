@@ -10,19 +10,17 @@ namespace QuickEye.BakingTools
     partial class BakingMoldsLibraryEditor
     {
         public const string UxmlPath = "Packages/com.quickeye.bakingtools/Editor/BakingMoldsLibraryEditor.uxml";
-        private UnityEditor.UIElements.ToolbarBreadcrumbs _breadcrumbs;
         private VisualElement _transitionContainer;
+        private UnityEditor.UIElements.ToolbarButton _backButton;
         private ListView _moldsListView;
         private VisualElement _moldDetails;
-        private VisualElement _arrowButton;
     
         protected void AssignQueryResults(VisualElement root)
         {
-            _breadcrumbs = root.Q<UnityEditor.UIElements.ToolbarBreadcrumbs>("breadcrumbs");
             _transitionContainer = root.Q<VisualElement>("transition-container");
+            _backButton = root.Q<UnityEditor.UIElements.ToolbarButton>("back-button");
             _moldsListView = root.Q<ListView>("molds-list-view");
             _moldDetails = root.Q<VisualElement>("mold-details");
-            _arrowButton = root.Q<VisualElement>("arrow-button");
         }
     }
 }

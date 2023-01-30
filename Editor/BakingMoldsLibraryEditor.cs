@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -39,13 +40,6 @@ namespace QuickEye.BakingTools
             AssignQueryResults(root);
             SetupBreadcrumbs();
             SetupListView();
-            root.Add(new Button(() =>
-            {
-                var prop = new PropertyField(_moldListProperty);
-                root.Add(prop);
-                prop.Bind(serializedObject);
-                
-            }){text = "hejo" });
             return root;
         }
 
@@ -59,11 +53,16 @@ namespace QuickEye.BakingTools
 
         void SetupBreadcrumbs()
         {
-            _breadcrumbs.PushItem("Molds", () =>
+            // _breadcrumbs.PushItem("Molds", () =>
+            // {
+            //     _transitionContainer.RemoveFromClassList("details-active");
+            //     if (_breadcrumbs.childCount > 1)
+            //         _breadcrumbs.PopItem();
+            // });
+            _backButton.clicked += () =>
             {
                 _transitionContainer.RemoveFromClassList("details-active");
-                _breadcrumbs.PopItem();
-            });
+            };
         }
 
         void SetupListView()
@@ -80,13 +79,6 @@ namespace QuickEye.BakingTools
                 if (sceneView != null)
                     sceneView.ShowNotification(new GUIContent($"Apply {SelectedProperty.displayName}"));
             };
-            _moldsListView.onSelectionChange += _ =>
-            {
-                // serializedSelectionIndex = _moldsList.selectedIndex;
-                //  Debug.Log($"on selection change {serializedSelectionIndex}");
-                // if (_moldsList.selectedIndex != -1)
-                // _selectedProperty = _moldListProperty.GetArrayElementAtIndex(_moldsList.selectedIndex);
-            };
         }
 
         VisualElement CreateListViewElement()
@@ -102,7 +94,7 @@ namespace QuickEye.BakingTools
             button.RegisterCallback<ClickEvent>(e =>
             {
                 var elementName = SelectedProperty.displayName;
-                _breadcrumbs.PushItem(elementName);
+               // _breadcrumbs.PushItem(elementName);
                 SetupDetailsView();
                 _transitionContainer.AddToClassList("details-active");
             });
@@ -167,6 +159,5 @@ namespace QuickEye.BakingTools
                 position.y += position.height + EditorGUIUtility.standardVerticalSpacing;
             }
         }
-        
     }
 }

@@ -1,14 +1,15 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" gen-cs-file="8808b031bb8f61a4b88fbc2794df9558" editor-extension-mode="True">
     <Style src="project://database/Packages/com.quickeye.bakingtools/Editor/BakingMoldsLibraryEditor.style.uss?fileID=7433441132597879392&amp;guid=bf9a0c53ec591024e96aa1795e87c023&amp;type=3#BakingMoldsLibraryEditor.style" />
-    <uie:Toolbar style="transition-property: left; transition-duration: 1s;">
-        <uie:ToolbarBreadcrumbs name="breadcrumbs" />
-    </uie:Toolbar>
-    <ui:VisualElement name="transition-container" class="transition-container" style="background-color: rgba(0, 0, 0, 0); flex-direction: row; width: 200%; transition-property: left; transition-duration: 0.2s;">
-        <ui:ListView focusable="true" name="molds-list-view" fixed-item-height="25" reorder-mode="Animated" show-add-remove-footer="true" show-bound-collection-size="false" style="flex-grow: 1; width: 50%;" />
-        <ui:VisualElement name="mold-details" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); width: 50%;" />
-    </ui:VisualElement>
-    <ui:VisualElement class="mold-list__item" style="background-color: rgba(0, 0, 0, 0); height: 25px; display: flex;">
-        <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" />
-        <ui:VisualElement name="arrow-button" style="width: 20px;" />
+    <ui:VisualElement name="transition-container" class="transition-container" style="width: 200%;">
+        <uie:Toolbar style="transition-property: left; transition-duration: 1s; background-color: rgb(60, 60, 60);">
+            <uie:ToolbarButton text="Presets" display-tooltip-when-elided="true" />
+            <uie:ToolbarButton text="Details" display-tooltip-when-elided="true" name="back-button">
+                <ui:VisualElement class="arrow-left" style="position: absolute; height: 100%; width: 16px; -unity-background-scale-mode: scale-to-fit; display: flex;" />
+            </uie:ToolbarButton>
+        </uie:Toolbar>
+        <ui:VisualElement style="flex-direction: row;">
+            <ui:ListView focusable="true" name="molds-list-view" fixed-item-height="25" reorder-mode="Animated" show-add-remove-footer="true" show-bound-collection-size="false" show-alternating-row-backgrounds="ContentOnly" style="flex-grow: 1; width: 50%;" />
+            <ui:VisualElement name="mold-details" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); width: 50%;" />
+        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

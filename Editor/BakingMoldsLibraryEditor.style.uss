@@ -28,18 +28,8 @@
     display: flex;
 }
 
-.transition-container.details-active {
-    left: -100%;
-    transition-property: left;
-    transition-duration: 0.2s;
-}
-
 .anim-test {
     background-color: rgb(192, 88, 20);
-}
-
-.transition-container {
-    left: 0;
 }
 
 #arrow-button {
@@ -54,4 +44,38 @@
 
 #arrow-button:active {
     background-color: red;
+}
+
+.header {
+    flex-grow: 1;
+    -unity-text-align: middle-center;
+    -unity-font-style: bold;
+    justify-content: center;
+}
+
+.transition-container {
+    width: 200%;
+    transition-property: left;
+    transition-duration: 0.2s;
+    left: 0;
+}
+
+ToolbarButton {
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    width: 100%;
+}
+
+.transition-container.details-active {
+    left: -100%;
+    transition-property: left;
+    transition-duration: 0.2s;
+}
+
+.arrow-left {
+    background-image: var(--unity-icons-arrow_left);
 }
