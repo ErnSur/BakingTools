@@ -11,23 +11,17 @@
 
 #mold-list__item__apply-button {
     display: none;
-    -unity-background-scale-mode: scale-to-fit;
     width: 50px;
-    background-color: clear;
-    border-width: 1px;
-    border-radius: 3px;
+    position: absolute;
+    right: 0;
+    left: auto;
+    bottom: 0;
+    top: 0;
+    -unity-text-align: middle-center;
 }
 
 .unity-collection-view__item--selected #mold-list__item__apply-button {
     display: flex;
-}
-
-#mold-list__item__apply-button:hover {
-    background-color: rgba(0, 0, 0, 0.09);
-}
-
-#mold-list__item__apply-button:active {
-    background-color: rgba(189, 189, 189, 0);
 }
 
 .mold-list__item {
@@ -51,29 +45,28 @@
     justify-content: center;
 }
 
-.transition-container {
-    width: 200%;
-    transition-property: left;
-    transition-duration: 0.2s;
-    left: 0;
+#preset-property {
 }
 
-ToolbarButton {
-    border-left-width: 0;
-    border-right-width: 0;
-    border-top-width: 0;
-    border-bottom-width: 0;
+#preset-property > Foldout > Toggle {
+    margin-top: 0;
+    margin-bottom: 0;
+    border-bottom-width: 1px;
+    border-color: black;
+    height: 25;
+}
+
+#preset-property > Foldout > .unity-foldout__content {
+    padding-left: 0;
+    margin-left: 0;
+    background-color: var(--unity-colors-alternated_rows-background);
+    padding-top: 3px;
+    border-bottom-width: 1px;
+    border-color: black;
+}
+
+.header {
     -unity-font-style: bold;
     -unity-text-align: middle-center;
-    width: 100%;
-}
-
-.transition-container.details-active {
-    left: -100%;
-    transition-property: left;
-    transition-duration: 0.2s;
-}
-
-.arrow-left {
-    background-image: var(--unity-icons-arrow_left);
+    flex-grow: 1;
 }

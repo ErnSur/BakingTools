@@ -46,22 +46,13 @@ namespace QuickEye.BakingTools
             return root;
         }
 
-        void SetupDetailsView()
-        {
-            var isExpanded = _lastSelectedProperty?.isExpanded ?? false;
-            _lastSelectedProperty = SelectedProperty;
-            _lastSelectedProperty.isExpanded = isExpanded;
-            _detailsField.BindProperty(SelectedProperty);
-        }
-
         void SetupListView()
         {
-            //_moldsListView.makeItem = CreateListViewElement;
+            _moldsListView.makeItem = ()=>  new PropertyField(){name = "preset-property"};
             _moldsListView.bindingPath = nameof(BakingMoldsLibrary.molds);
             _moldsListView.selectionChanged += _ =>
             {
                 //serializedSelectionIndex = _moldsListView.selectedIndex;
-                SetupDetailsView();
             };
             _moldsListView.RegisterCallback<AttachToPanelEvent>(e =>
             {
@@ -74,9 +65,9 @@ namespace QuickEye.BakingTools
                 var foldout = element.Q<Foldout>();
                 foldout.Q(className: Foldout.inputUssClassName).pickingMode = PickingMode.Ignore;
                 foldout.Q(className: Foldout.toggleUssClassName).pickingMode = PickingMode.Ignore;
-                foldout.Q(className: Foldout.textUssClassName).pickingMode = PickingMode.Ignore;
+                //foldout.Q(className: Foldout.textUssClassName).pickingMode = PickingMode.Ignore;
                 foldout.Q(className: Foldout.checkmarkUssClassName).pickingMode = PickingMode.Position;
-                var applyButton = new Button();
+                var applyButton = new ToolbarButton();
                 applyButton.text = "Apply";
                 /*applyButton.AddManipulator(new Clickable(() =>
                 {
@@ -85,6 +76,7 @@ namespace QuickEye.BakingTools
                     //_transitionContainer.AddToClassList("details-active");
                 }));*/
                 applyButton.name = "mold-list__item__apply-button";
+                foldout.Q(className:Foldout.inputUssClassName).Add(applyButton);
                 //root.Add(applyButton);
             };
             

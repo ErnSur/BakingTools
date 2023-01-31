@@ -10,12 +10,12 @@ namespace QuickEye.BakingTools
     partial class BakingMoldsLibraryEditor
     {
         public const string UxmlPath = "Packages/com.quickeye.bakingtools/Editor/BakingMoldsLibraryEditor.uxml";
-        private UnityEditor.UIElements.PropertyField _detailsField;
+        private VisualElement _targetDetailsContainer;
         private ListView _moldsListView;
     
         protected void AssignQueryResults(VisualElement root)
         {
-            _detailsField = root.Q<UnityEditor.UIElements.PropertyField>("details-field");
+            _targetDetailsContainer = root.Q<VisualElement>("target-details-container");
             _moldsListView = root.Q<ListView>("molds-list-view");
         }
     }

@@ -1,10 +1,14 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" gen-cs-file="8808b031bb8f61a4b88fbc2794df9558" editor-extension-mode="True">
     <Style src="project://database/Packages/com.quickeye.bakingtools/Editor/BakingMoldsLibraryEditor.style.uss?fileID=7433441132597879392&amp;guid=bf9a0c53ec591024e96aa1795e87c023&amp;type=3#BakingMoldsLibraryEditor.style" />
     <ui:VisualElement style="flex-grow: 1; overflow: hidden;">
-        <uie:PropertyField name="details-field" />
+        <ui:VisualElement name="target-details-container" style="background-color: rgba(0, 0, 0, 0);">
+            <uie:Toolbar>
+                <ui:Label tabindex="-1" text="Target" display-tooltip-when-elided="true" class="header" />
+            </uie:Toolbar>
+        </ui:VisualElement>
         <ui:VisualElement>
             <uie:Toolbar style="transition-property: left; transition-duration: 1s; background-color: rgb(60, 60, 60);">
-                <ui:Label tabindex="-1" text="Presets" display-tooltip-when-elided="true" style="-unity-font-style: bold; -unity-text-align: middle-center; flex-grow: 1;" />
+                <ui:Label tabindex="-1" text="Presets" display-tooltip-when-elided="true" class="header" />
             </uie:Toolbar>
             <ui:VisualElement style="flex-direction: row;">
                 <ui:ListView focusable="true" name="molds-list-view" fixed-item-height="25" reorder-mode="Animated" show-add-remove-footer="true" show-bound-collection-size="false" show-alternating-row-backgrounds="None" virtualization-method="DynamicHeight" style="flex-grow: 1; width: 50%;" />
