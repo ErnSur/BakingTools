@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Unity.Properties;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -13,6 +14,7 @@ namespace QuickEye.BakingTools
         [SerializeField]
         VisualTreeAsset uiTemplate;
 
+        [CreateProperty]
         [SerializeField]
         int serializedSelectionIndex;
 
@@ -54,7 +56,7 @@ namespace QuickEye.BakingTools
 
         void SetupListView()
         {
-            _moldsListView.makeItem = CreateListViewElement;
+            //_moldsListView.makeItem = CreateListViewElement;
             _moldsListView.bindingPath = nameof(BakingMoldsLibrary.molds);
             _moldsListView.selectionChanged += _ =>
             {
@@ -66,12 +68,27 @@ namespace QuickEye.BakingTools
                 _moldsListView.selectedIndex = serializedSelectionIndex;
             });
             _moldsListView.itemsChosen += items => { ApplyPreset(); };
-            var footer=_moldsListView.Q(classes: BaseListView.footerUssClassName);
-            footer.Add(new Button()
+            _moldsListView.bindItem += (element, i) =>
             {
-                text = "Apply",
-                style = {width = 50,fontSize = 13, unityFontStyleAndWeight = FontStyle.Normal}
-            });
+                ((PropertyField)element).BindProperty(_moldListProperty.GetArrayElementAtIndex(i));
+                var foldout = element.Q<Foldout>();
+                foldout.Q(className: Foldout.inputUssClassName).pickingMode = PickingMode.Ignore;
+                foldout.Q(className: Foldout.toggleUssClassName).pickingMode = PickingMode.Ignore;
+                foldout.Q(className: Foldout.textUssClassName).pickingMode = PickingMode.Ignore;
+                foldout.Q(className: Foldout.checkmarkUssClassName).pickingMode = PickingMode.Position;
+                var applyButton = new Button();
+                applyButton.text = "Apply";
+                /*applyButton.AddManipulator(new Clickable(() =>
+                {
+                    ApplyPreset();
+                    //SetupDetailsView();
+                    //_transitionContainer.AddToClassList("details-active");
+                }));*/
+                applyButton.name = "mold-list__item__apply-button";
+                //root.Add(applyButton);
+            };
+            
+
         }
 
         void ApplyPreset()
@@ -86,13 +103,7 @@ namespace QuickEye.BakingTools
 
         VisualElement CreateListViewElement()
         {
-            var root = new BindableElement();
-            root.style.height = _moldsListView.fixedItemHeight;
-            root.AddToClassList("mold-list__item");
-            var label = new Label();
-            label.name = "mold-list__item__name";
-            label.bindingPath = nameof(BakingMold.name);
-            root.Add(label);
+            var root = new PropertyField();
 
             var applyButton = new Button();
             applyButton.text = "Apply";
