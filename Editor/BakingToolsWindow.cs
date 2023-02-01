@@ -29,9 +29,7 @@ namespace QuickEye.BakingTools
         void CreateGUI()
         {
             //view = libEditor.CreateInspectorGUI();
-            var inspector = new InspectorElement(new SerializedObject(library));
-            inspector.style.backgroundColor = Color.green;
-            
+            var inspector = new InspectorElement(new SerializedObject(Selection.activeTransform));
             rootVisualElement.Add(inspector);
             //  rootVisualElement.Add(view);
         }
