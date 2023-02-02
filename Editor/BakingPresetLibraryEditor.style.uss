@@ -1,0 +1,37 @@
+#preset-list-view {
+    max-height: 271;
+    min-width: 200;
+}
+
+/*Preset List Item*/
+
+#preset-property > Foldout > Toggle {
+    margin: 0;
+    border-bottom-width: 1px;
+    border-color: black;
+    height: 25;
+}
+
+#preset-property > Foldout > .unity-foldout__content {
+    padding-left: 0;
+    margin-left: 0;
+    background-color: var(--unity-colors-alternated_rows-background);
+    padding-top: 3px;
+    border-bottom-width: 1px;
+    border-color: black;
+}
+
+#preset-list__item__apply-button {
+    display: none;
+    width: 50px;
+    position: absolute;
+    right: 0;
+    left: auto;
+    bottom: 0;
+    top: 0;
+    -unity-text-align: middle-center;
+}
+
+.unity-collection-view__item--selected #preset-list__item__apply-button {
+    display: flex;
+}

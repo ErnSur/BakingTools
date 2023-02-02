@@ -7,7 +7,7 @@ namespace QuickEye.BakingTools
 {
     class BakingToolsWindow : EditorWindow
     {
-        BakingMoldsLibrary library;
+        BakingPresetLibrary library;
         //Editor libEditor;
         //VisualElement view;
 
@@ -19,9 +19,9 @@ namespace QuickEye.BakingTools
 
         void OnEnable()
         {
-            library = AssetDatabase.FindAssets($"t:{nameof(BakingMoldsLibrary)}")
+            library = AssetDatabase.FindAssets($"t:{nameof(BakingPresetLibrary)}")
                 .Select(AssetDatabase.GUIDToAssetPath)
-                .Select(AssetDatabase.LoadAssetAtPath<BakingMoldsLibrary>)
+                .Select(AssetDatabase.LoadAssetAtPath<BakingPresetLibrary>)
                 .FirstOrDefault();
             // libEditor = Editor.CreateEditor(library);
         }

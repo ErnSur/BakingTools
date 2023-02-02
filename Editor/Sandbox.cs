@@ -8,9 +8,9 @@ namespace QuickEye.BakingTools
 {
     public class BakingToolInspector : InspectorElement
     {
-        public BakingToolInspector() : base(AssetDatabase.FindAssets($"t:{nameof(BakingMoldsLibrary)}")
+        public BakingToolInspector() : base(AssetDatabase.FindAssets($"t:{nameof(BakingPresetLibrary)}")
             .Select(AssetDatabase.GUIDToAssetPath)
-            .Select(AssetDatabase.LoadAssetAtPath<BakingMoldsLibrary>)
+            .Select(AssetDatabase.LoadAssetAtPath<BakingPresetLibrary>)
             .FirstOrDefault())
         {
             
@@ -67,11 +67,11 @@ namespace QuickEye.BakingTools
             this.BindProperty(new SerializedObject(GetData()).FindProperty("molds"));
         }
 
-        private BakingMoldsLibrary GetData()
+        private BakingPresetLibrary GetData()
         {
-            return AssetDatabase.FindAssets($"t:{nameof(BakingMoldsLibrary)}")
+            return AssetDatabase.FindAssets($"t:{nameof(BakingPresetLibrary)}")
                 .Select(AssetDatabase.GUIDToAssetPath)
-                .Select(AssetDatabase.LoadAssetAtPath<BakingMoldsLibrary>)
+                .Select(AssetDatabase.LoadAssetAtPath<BakingPresetLibrary>)
                 .FirstOrDefault();
         }
         
@@ -81,7 +81,7 @@ namespace QuickEye.BakingTools
             root.style.height = fixedItemHeight;
             root.AddToClassList("mold-list__item");
             var label = new Label();
-            label.bindingPath = nameof(BakingMold.name);
+            label.bindingPath = nameof(BakingPreset.name);
             root.Add(label);
 
 
