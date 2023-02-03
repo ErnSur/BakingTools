@@ -24,7 +24,9 @@ namespace QuickEye.BakingTools
 
         void OnDestroy()
         {
-            serializedSelectionIndex = _presetListView.selectedIndex;
+            //TODO: remove this, causes an error when object is selected in object picker
+            if (_presetListView != null)
+                serializedSelectionIndex = _presetListView.selectedIndex;
         }
 
         public override VisualElement CreateInspectorGUI()
@@ -68,23 +70,32 @@ namespace QuickEye.BakingTools
 
         void ApplyPreset()
         {
+                
             var sceneView = SceneView.lastActiveSceneView;
-            if (sceneView != null)
+            if (sceneView == null)
+                return;
+            if (!IsGameObjectSelected())
             {
-                var preset = ((BakingPresetLibrary)target).presets[_presetListView.selectedIndex];
-                foreach (var gameObject in Selection.gameObjects)
-                {
-                    preset.ApplyPreset(gameObject, false);
-                    EditorGUIUtility.PingObject(gameObject);
-                }
-
-                var message = Selection.gameObjects.Length > 1
-                    ? $"Applied {preset.name}"
-                    : $"Applied {preset.name} to {Selection.activeGameObject.name}";
-                sceneView.ShowNotification(new GUIContent(message), 0.4f);
-                //sceneView.Focus();
+                sceneView.ShowNotification(new GUIContent("Select game object first"));
+                sceneView.Focus();
+                return;
             }
+
+            var preset = ((BakingPresetLibrary)target).presets[_presetListView.selectedIndex];
+            foreach (var gameObject in Selection.gameObjects)
+            {
+                preset.ApplyPreset(gameObject, false);
+                EditorGUIUtility.PingObject(gameObject);
+            }
+
+            var message = Selection.gameObjects.Length > 1
+                ? $"Applied {preset.name} to {Selection.gameObjects.Length} objects"
+                : $"Applied {preset.name} to {Selection.activeGameObject.name}";
+            sceneView.ShowNotification(new GUIContent(message), 0.4f);
+            //sceneView.Focus();
         }
+
+        bool IsGameObjectSelected() => Selection.gameObjects.Length > 0;
 
         public override bool UseDefaultMargins() => false;
 
