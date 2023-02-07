@@ -1,0 +1,255 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66e0ff4cadc4f3240be06e634b0da3f1, type: 3}
+  m_Name: 0Small Molds
+  m_EditorClassIdentifier: 
+  presets:
+  - name: Wall
+    staticFlags:
+      isOn: 0
+      value: -1
+    lightmapScale:
+      isOn: 1
+      value: 69
+    stitchSeams:
+      isOn: 1
+      value: 0
+    castShadows:
+      isOn: 1
+      value: 0
+    navMeshArea:
+      isOn: 1
+      value: 0
+  - name: Small obj
+    staticFlags:
+      isOn: 1
+      value: -1
+    lightmapScale:
+      isOn: 0
+      value: 0
+    stitchSeams:
+      isOn: 0
+      value: 0
+    castShadows:
+      isOn: 1
+      value: 1
+    navMeshArea:
+      isOn: 0
+      value: 0
+  - name: Floor
+    staticFlags:
+      isOn: 1
+      value: -1
+    lightmapScale:
+      isOn: 0
+      value: 0
+    stitchSeams:
+      isOn: 0
+      value: 0
+    castShadows:
+      isOn: 1
+      value: 1
+    navMeshArea:
+      isOn: 0
+      value: 0
+  - name: Sofa
+    staticFlags:
+      isOn: 1
+      value: -1
+    lightmapScale:
+      isOn: 0
+      value: 0
+    stitchSeams:
+      isOn: 0
+      value: 0
+    castShadows:
+      isOn: 1
+      value: 1
+    navMeshArea:
+      isOn: 0
+      value: 0
+  - name: Sofa
+    staticFlags:
+      isOn: 1
+      value: -1
+    lightmapScale:
+      isOn: 0
+      value: 0
+    stitchSeams:
+      isOn: 0
+      value: 0
+    castShadows:
+      isOn: 1
+      value: 1
+    navMeshArea:
+      isOn: 0
+      value: 0
+  - name: Sofa
+    staticFlags:
+      isOn: 1
+      value: -1
+    lightmapScale:
+      isOn: 0
+      value: 0
+    stitchSeams:
+      isOn: 0
+      value: 0
+    castShadows:
+      isOn: 1
+      value: 1
+    navMeshArea:
+      isOn: 0
+      value: 0
+  - name: Sofa
+    staticFlags:
+      isOn: 1
+      value: -1
+    lightmapScale:
+      isOn: 0
+      value: 0
+    stitchSeams:
+      isOn: 0
+      value: 0
+    castShadows:
+      isOn: 1
+      value: 1
+    navMeshArea:
+      isOn: 0
+      value: 0
+  - name: Sofa
+    staticFlags:
+      isOn: 1
+      value: -1
+    lightmapScale:
+      isOn: 0
+      value: 0
+    stitchSeams:
+      isOn: 0
+      value: 0
+    castShadows:
+      isOn: 1
+      value: 1
+    navMeshArea:
+      isOn: 0
+      value: 0
+  - name: Sofa
+    staticFlags:
+      isOn: 1
+      value: -1
+    lightmapScale:
+      isOn: 0
+      value: 0
+    stitchSeams:
+      isOn: 0
+      value: 0
+    castShadows:
+      isOn: 1
+      value: 1
+    navMeshArea:
+      isOn: 0
+      value: 0
+  - name: Sofa
+    staticFlags:
+      isOn: 1
+      value: -1
+    lightmapScale:
+      isOn: 0
+      value: 0
+    stitchSeams:
+      isOn: 0
+      value: 0
+    castShadows:
+      isOn: 1
+      value: 1
+    navMeshArea:
+      isOn: 0
+      value: 0
+  - name: Sofa
+    staticFlags:
+      isOn: 1
+      value: -1
+    lightmapScale:
+      isOn: 0
+      value: 0
+    stitchSeams:
+      isOn: 0
+      value: 0
+    castShadows:
+      isOn: 1
+      value: 1
+    navMeshArea:
+      isOn: 0
+      value: 0
+  - name: Sofa
+    staticFlags:
+      isOn: 1
+      value: -1
+    lightmapScale:
+      isOn: 0
+      value: 0
+    stitchSeams:
+      isOn: 0
+      value: 0
+    castShadows:
+      isOn: 1
+      value: 1
+    navMeshArea:
+      isOn: 0
+      value: 0
+  - name: Sofa
+    staticFlags:
+      isOn: 1
+      value: -1
+    lightmapScale:
+      isOn: 0
+      value: 0
+    stitchSeams:
+      isOn: 0
+      value: 0
+    castShadows:
+      isOn: 1
+      value: 1
+    navMeshArea:
+      isOn: 0
+      value: 0
+  - name: Sofa
+    staticFlags:
+      isOn: 1
+      value: -1
+    lightmapScale:
+      isOn: 0
+      value: 0
+    stitchSeams:
+      isOn: 0
+      value: 0
+    castShadows:
+      isOn: 1
+      value: 1
+    navMeshArea:
+      isOn: 0
+      value: 0
+  - name: Sofa
+    staticFlags:
+      isOn: 1
+      value: -1
+    lightmapScale:
+      isOn: 0
+      value: 0
+    stitchSeams:
+      isOn: 0
+      value: 0
+    castShadows:
+      isOn: 1
+      value: 1
+    navMeshArea:
+      isOn: 0
+      value: 0
