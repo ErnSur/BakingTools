@@ -52,7 +52,7 @@ namespace QuickEye.BakingTools
                 {
                     ((PresetListItem)element).Bind(_presetsProperty.GetArrayElementAtIndex(i));
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     Debug.Log($"i:{i}, PropSize: {_presetsProperty.arraySize}");
                     throw;

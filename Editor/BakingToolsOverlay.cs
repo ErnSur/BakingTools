@@ -1,9 +1,7 @@
-using System.Collections.Generic;
-using System.Linq;
 using UnityEditor;
 using UnityEditor.Overlays;
+using UnityEditor.ProjectWindowCallback;
 using UnityEditor.Search;
-using UnityEditor.Toolbars;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -14,38 +12,26 @@ namespace QuickEye.BakingTools
     [Overlay(typeof(SceneView), "Baking Presets", defaultDisplay = true)]
     class BakingToolsOverlay : Overlay
     {
-        VisualElement view;
-        BakingPresetLibrary _library;
-
-        public override void OnCreated()
+        readonly VisualElement view = new VisualElement()
         {
-            // library = AssetDatabase.FindAssets($"t:{nameof(BakingPresetLibrary)}")
-            //     .Select(AssetDatabase.GUIDToAssetPath)
-            //     .Select(AssetDatabase.LoadAssetAtPath<BakingPresetLibrary>)
-            //     .FirstOrDefault();
+            style = { width = 250 }
+        };
+
+        static BakingPresetLibrary Library
+        {
+            get => Settings.instance.LastLibraryOpened;
+            set => Settings.instance.LastLibraryOpened = value;
         }
 
         public override VisualElement CreatePanelContent()
         {
-            if (_library == null)
-                return GetSelectLibraryView();
-            
-            if (view != null)
-                return view;
-            view = new InspectorElement(new SerializedObject(_library));
-            view.style.width = 250;
-            // var root = new VisualElement();
-            // root.style.flexDirection = FlexDirection.Row;
-            // root.Add(new SampleListView());
-            // view = root;
-
+            RebuildView();
             return view;
         }
 
-        VisualElement GetSelectLibraryView()
+        VisualElement CreateLibrarySelectionView()
         {
             var root = new VisualElement();
-
 
             root.style.alignContent = Align.Center;
             root.style.justifyContent = Justify.Center;
@@ -59,9 +45,24 @@ namespace QuickEye.BakingTools
             return root;
         }
 
+        VisualElement CreatePresetLibraryView()
+        {
+            var inspectorElement = new InspectorElement(new SerializedObject(Library));
+            inspectorElement.Q<Toolbar>().Add(new Button(){text = "Change"});
+            return inspectorElement;
+        }
+
         void CreateLibrary()
         {
-            
+            var tempObject = ScriptableObject.CreateInstance<BakingPresetLibrary>();
+            var createAssetAction = ScriptableObject.CreateInstance<UserCreatedLibraryAction>();
+            createAssetAction.overlay = this;
+            ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0,
+                createAssetAction,
+                "Assets/New Baking Preset Library.asset",
+                EditorGUIUtility.GetIconForObject(MonoScript.FromScriptableObject(tempObject)),
+                null);
+            Object.DestroyImmediate(tempObject);
         }
 
         void SelectLibrary()
@@ -70,9 +71,49 @@ namespace QuickEye.BakingTools
                 {
                     if (canceled)
                         return;
-                    _library = (BakingPresetLibrary)selectedObject;
+                    Library = (BakingPresetLibrary)selectedObject;
+                    RebuildView();
                 },
                 null, null, null, typeof(BakingPresetLibrary));
+        }
+
+        void RebuildView()
+        {
+            view.Clear();
+            if (Library == null)
+                view.Add(CreateLibrarySelectionView());
+            else
+                view.Add(CreatePresetLibraryView());
+        }
+
+        [FilePath("Library/BakingPresetOverlaySettings", FilePathAttribute.Location.ProjectFolder)]
+        class Settings : ScriptableSingleton<Settings>
+        {
+            [SerializeField]
+            BakingPresetLibrary lastLibraryOpened2;
+
+            public BakingPresetLibrary LastLibraryOpened
+            {
+                get => lastLibraryOpened2;
+                set
+                {
+                    lastLibraryOpened2 = value;
+                    Save(true);
+                }
+            }
+        }
+
+        class UserCreatedLibraryAction : EndNameEditAction
+        {
+            public BakingToolsOverlay overlay;
+
+            public override void Action(int instanceId, string pathName, string resourceFile)
+            {
+                var newLibrary = CreateInstance<BakingPresetLibrary>();
+                AssetDatabase.CreateAsset(newLibrary, pathName);
+                Settings.instance.LastLibraryOpened = newLibrary;
+                overlay.RebuildView();
+            }
         }
     }
 }
